@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Sample FaceAR-VE</string>
+
+
+    <!-- Please contact Banuba https://www.banuba.com/video-editor-sdk to get this token -->
+    <string name="effect_player_token">***REMOVED***</string>
+</resources>
