@@ -12,9 +12,7 @@ import com.banuba.sdk.cameraui.domain.MODE_RECORD_VIDEO
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.ve.flow.VideoCreationActivity
 import kotlinx.android.synthetic.main.acitivity_face_ar.*
-import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.loadKoinModules
-import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.context.unloadKoinModules
 import org.koin.core.module.Module
@@ -31,14 +29,12 @@ class FaceArActivity : AppCompatActivity() {
 
     private var banubaSdkManager: BanubaSdkManager? = null
 
-    private var editorKoinModules: List<Module> = emptyList()
+    private var videoEditorKoinModules: List<Module> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.acitivity_face_ar)
-        startKoin {
-            androidContext(applicationContext)
-        }
+
         faceArApplyMaskButton.setOnClickListener {
             applyMask()
         }
@@ -47,11 +43,40 @@ class FaceArActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (editorKoinModules.isNotEmpty()) {
+    /*
+     * Banuba Video Editor SDK specific code
+     */
+    private fun releaseVideoEditor() {
+        if (videoEditorKoinModules.isNotEmpty()) {
             destroyEditor()
         }
+    }
+
+    private fun initializeEditor() {
+        videoEditorKoinModules = listOf(
+            ArCloudKoinModule().module,
+            VideoEditorKoinModule().module
+        )
+        loadKoinModules(videoEditorKoinModules)
+    }
+
+    private fun destroyEditor() {
+        unloadKoinModules(videoEditorKoinModules)
+        videoEditorKoinModules = emptyList()
+    }
+
+    private fun openVideoEditor() {
+        destroyFaceAr()
+        initializeEditor()
+        val intent = VideoCreationActivity.buildIntent(this, MODE_RECORD_VIDEO)
+        startActivity(intent)
+    }
+
+    /**
+     * Banuba Face AR SDK specific code
+     */
+
+    private fun prepareFaceAR() {
         if (banubaSdkManager == null) {
             initializeFaceAr()
         }
@@ -61,6 +86,41 @@ class FaceArActivity : AppCompatActivity() {
         } else {
             requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
+    }
+
+    private fun initializeFaceAr() {
+        BanubaSdkManager.deinitialize()
+        BanubaSdkManager.initialize(applicationContext, getString(R.string.effect_player_token))
+        banubaSdkManager = BanubaSdkManager(applicationContext)
+    }
+
+    private fun destroyFaceAr() {
+        banubaSdkManager?.closeCamera()
+        banubaSdkManager?.releaseSurface()
+        banubaSdkManager = null
+        BanubaSdkManager.deinitialize()
+    }
+
+    private fun applyMask() {
+        val effectManager = this.banubaSdkManager?.effectManager ?: return
+        val maskUrl = if (effectManager.current()?.url() != "") {
+            ""
+        } else {
+            Uri.parse(BanubaSdkManager.getResourcesBase())
+                .buildUpon()
+                .appendPath("effects")
+                .appendPath("Beauty")
+                .build()
+                .toString()
+        }
+        effectManager.loadAsync(maskUrl)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        releaseVideoEditor()
+
+        prepareFaceAR()
     }
 
     override fun onResume() {
@@ -98,54 +158,6 @@ class FaceArActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, "Please grant permission.", Toast.LENGTH_LONG).show()
             finish()
         }
-    }
-
-    private fun applyMask() {
-        val effectManager = this.banubaSdkManager?.effectManager ?: return
-        val maskUrl = if (effectManager.current()?.url() != "") {
-            ""
-        } else {
-            Uri.parse(BanubaSdkManager.getResourcesBase())
-                .buildUpon()
-                .appendPath("effects")
-                .appendPath("Beauty")
-                .build()
-                .toString()
-        }
-        effectManager.loadAsync(maskUrl)
-    }
-
-    private fun openVideoEditor() {
-        destroyFaceAr()
-        initializeEditor()
-        val intent = VideoCreationActivity.buildIntent(this, MODE_RECORD_VIDEO)
-        startActivity(intent)
-    }
-
-    private fun initializeFaceAr() {
-        BanubaSdkManager.deinitialize()
-        BanubaSdkManager.initialize(applicationContext, getString(R.string.effect_player_token))
-        banubaSdkManager = BanubaSdkManager(applicationContext)
-    }
-
-    private fun destroyFaceAr() {
-        banubaSdkManager?.closeCamera()
-        banubaSdkManager?.releaseSurface()
-        banubaSdkManager = null
-        BanubaSdkManager.deinitialize()
-    }
-
-    private fun initializeEditor() {
-        editorKoinModules = listOf(
-            ArCloudKoinModule().module,
-            VideoEditorKoinModule().module
-        )
-        loadKoinModules(editorKoinModules)
-    }
-
-    private fun destroyEditor() {
-        unloadKoinModules(editorKoinModules)
-        editorKoinModules = emptyList()
     }
 
     private fun checkAllPermissionsGranted() = REQUIRED_PERMISSIONS.all {
