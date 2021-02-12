@@ -3,5 +3,5 @@
 
 
     <!-- Please contact Banuba https://www.banuba.com/video-editor-sdk to get this token -->
-    <string name="effect_player_token">***REMOVED***</string>
+    <string name="effect_player_token">PLACE TOKEN HERE</string>
 </resources>
