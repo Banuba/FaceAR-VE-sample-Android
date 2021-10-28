@@ -1,50 +1,77 @@
 package com.banuba.sdk.example
 
+import android.app.Application
+import androidx.fragment.app.Fragment
+import com.banuba.sdk.arcloud.data.source.ArEffectsRepositoryProvider
+import com.banuba.sdk.audiobrowser.domain.AudioBrowserMusicProvider
+import com.banuba.sdk.cameraui.data.CameraTimerActionProvider
 import com.banuba.sdk.cameraui.data.CameraTimerStateProvider
-import com.banuba.sdk.cameraui.data.TimerEntry
-import com.banuba.sdk.core.AREffectPlayerProvider
-import com.banuba.sdk.core.IUtilityManager
-import com.banuba.sdk.effectplayer.adapter.BanubaAREffectPlayerProvider
-import com.banuba.sdk.effectplayer.adapter.BanubaClassFactory
-import com.banuba.sdk.ve.flow.ExportFlowManager
+import com.banuba.sdk.cameraui.domain.HandsFreeTimerActionProvider
+import com.banuba.sdk.core.data.TrackData
+import com.banuba.sdk.core.domain.DraftConfig
+import com.banuba.sdk.core.ui.ContentFeatureProvider
+import com.banuba.sdk.export.data.ExportFlowManager
+import com.banuba.sdk.export.data.ForegroundExportFlowManager
+import com.banuba.sdk.ve.data.PublishManager
+import com.banuba.sdk.ve.effects.WatermarkProvider
 import com.banuba.sdk.ve.flow.ExportResultHandler
 import com.banuba.sdk.ve.flow.FlowEditorModule
+import com.banuba.sdk.veui.domain.CoverProvider
 import org.koin.core.definition.BeanDefinition
 import org.koin.core.qualifier.named
 
 class VideoEditorKoinModule : FlowEditorModule() {
 
-    override val effectPlayerManager: BeanDefinition<AREffectPlayerProvider> =
-        single(override = true) {
-            BanubaAREffectPlayerProvider(
-                mediaSizeProvider = get(),
-                token = "ippJfY0xiKGOqWDm0uFnayxK7fK+1u0DuoAruXX1Ka54R5Qjwj4s9ZoGaGaACFfgi0HAL32wzC1slfUqZ6yyxXpxQ+ljiL+/hFpStDMmBWGZBCvG+FlTtd9wa9bU9rC6DjJwNuRfGSe4bszdKxGBEPE5MY5nJW76w/ffFeY6U898IOiOVy5wmsqXERSEbFA9PAeBYLnRpAx13CSFKWeTONMde5dMl3jmnLMlfXkbMXve9gTvL/fnDTyyUDeWHX6YfbmmWHFpP24t"
-            )
-        }
-
-    override val utilityManager: BeanDefinition<IUtilityManager> = single(override = true) {
-        BanubaClassFactory.createUtilityManager(
-            context = get()
-        )
-    }
-
-    override val exportFlowManager: BeanDefinition<ExportFlowManager> = single {
-        VideoEditorExportFlowManager(
+    val exportFlowManager: BeanDefinition<ExportFlowManager> = single(override = true) {
+        ForegroundExportFlowManager(
             exportDataProvider = get(),
-            editorSessionHelper = get(),
+            sessionParamsProvider = get(),
+            exportSessionHelper = get(),
             exportDir = get(named("exportDir")),
+            shouldClearSessionOnFinish = true,
+            publishManager = get(),
+            errorParser = get(),
             mediaFileNameHelper = get()
         )
     }
 
-    override val exportResultHandler: BeanDefinition<ExportResultHandler> = single {
-        VideoEditorExportResultHandler()
+    val publishManager: BeanDefinition<PublishManager> = single(override = true) {
+        ExternalPublishManager(
+            context = get<Application>().applicationContext,
+            albumName = "Banuba",
+            mediaFileNameHelper = get(),
+            dispatcher = get(named("ioDispatcher"))
+        )
     }
 
-    override val cameraTimerStateProvider: BeanDefinition<CameraTimerStateProvider> =
-        factory {
-            object : CameraTimerStateProvider {
-                override val timerStates: List<TimerEntry> = emptyList()
-            }
+    val arEffectsRepositoryProvider: BeanDefinition<ArEffectsRepositoryProvider> =
+        single(override = true, createdAtStart = true) {
+            ArEffectsRepositoryProvider(
+                arEffectsRepository = get(named("backendArEffectsRepository")),
+                ioDispatcher = get(named("ioDispatcher"))
+            )
         }
+
+    override val cameraTimerStateProvider: BeanDefinition<CameraTimerStateProvider> =
+        factory(override = true) {
+            IntegrationTimerStateProvider()
+        }
+
+    override val musicTrackProvider: BeanDefinition<ContentFeatureProvider<TrackData, Fragment>> =
+        single(named("musicTrackProvider"), override = true) {
+            AudioBrowserMusicProvider()
+        }
+
+    override val coverProvider: BeanDefinition<CoverProvider> = single(override = true) {
+        CoverProvider.EXTENDED
+    }
+
+    override val cameraTimerActionProvider: BeanDefinition<CameraTimerActionProvider> =
+        single(override = true) {
+            HandsFreeTimerActionProvider()
+        }
+
+    override val draftConfig: BeanDefinition<DraftConfig> = factory(override = true) {
+        DraftConfig.ENABLED_ASK_TO_SAVE
+    }
 }
