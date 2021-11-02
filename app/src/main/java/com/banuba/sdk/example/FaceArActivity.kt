@@ -8,14 +8,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.banuba.sdk.arcloud.di.ArCloudKoinModule
-import com.banuba.sdk.cameraui.domain.MODE_RECORD_VIDEO
+import com.banuba.sdk.audiobrowser.di.AudioBrowserKoinModule
+import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule
+import com.banuba.sdk.export.data.ExportFlowManager
+import com.banuba.sdk.export.di.VeExportKoinModule
+import com.banuba.sdk.gallery.di.GalleryKoinModule
 import com.banuba.sdk.manager.BanubaSdkManager
+import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
+import com.banuba.sdk.token.storage.provider.TokenProvider
+import com.banuba.sdk.ve.di.VeSdkKoinModule
 import com.banuba.sdk.ve.flow.VideoCreationActivity
 import kotlinx.android.synthetic.main.acitivity_face_ar.*
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.stopKoin
 import org.koin.core.context.unloadKoinModules
 import org.koin.core.module.Module
+import org.koin.core.qualifier.Qualifier
+import org.koin.core.qualifier.named
 
 class FaceArActivity : AppCompatActivity() {
 
@@ -26,6 +37,8 @@ class FaceArActivity : AppCompatActivity() {
             Manifest.permission.CAMERA,
         )
     }
+
+    private val tokenProvider: TokenProvider by inject(named("banubaTokenProvider"))
 
     private var banubaSdkManager: BanubaSdkManager? = null
 
@@ -52,12 +65,20 @@ class FaceArActivity : AppCompatActivity() {
         }
     }
 
+
     private fun initializeEditor() {
         videoEditorKoinModules = listOf(
+            VeSdkKoinModule().module,
+            VeExportKoinModule().module,
+            AudioBrowserKoinModule().module, // use this module only if you bought it
             ArCloudKoinModule().module,
-            VideoEditorKoinModule().module
+            TokenStorageKoinModule().module,
+            VideoEditorKoinModule().module,
+            GalleryKoinModule().module,
+            BanubaEffectPlayerKoinModule().module
         )
         loadKoinModules(videoEditorKoinModules)
+        tokenProvider.getToken()
     }
 
     private fun destroyEditor() {
@@ -68,7 +89,7 @@ class FaceArActivity : AppCompatActivity() {
     private fun openVideoEditor() {
         destroyFaceAr()
         initializeEditor()
-        val intent = VideoCreationActivity.buildIntent(this, MODE_RECORD_VIDEO)
+        val intent = VideoCreationActivity.startFromCamera(this)
         startActivity(intent)
     }
 
