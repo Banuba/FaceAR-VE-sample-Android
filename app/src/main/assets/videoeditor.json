@@ -5,14 +5,15 @@
     "supportsTimeEffects": true,
     "supportsVisualEffects": true,
     "supportsMusicMixer": true,
-    "supportsCoverImage": true,
+    "supportsTextOnVideo": true,
     "banubaColorEffectsAssetsPath": "luts",
     "textOnVideoColorCountOnPage": 6,
     "textOnVideoMaxSymbols": -1,
     "keepVideoOnExit": true,
     "supportsEditorLinkOnVideo": false,
     "stickersApiKey": "<-- Paste Giphy key here to load gif images -->",
-    "showConfig": true,
+    "showConfig": false,
+    "supportsTrimRecordedVideo": true,
     "interactions": {
       "question": false,
       "quiz": false,
@@ -22,9 +23,10 @@
     }
   },
   "trimmer": {
-    "minSourceVideoDuration": 2000,
+    "minSourceVideoDuration": 1000,
     "supportsMultiChoice": true,
-    "appearanceThreshold": 0
+    "appearanceThreshold": 0,
+    "supportsRotation": true
   },
   "slideshow": {
     "maxSelectedImages": 20,
