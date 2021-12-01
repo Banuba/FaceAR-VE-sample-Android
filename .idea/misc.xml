@@ -4,7 +4,18 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/bg_audio_recording_button.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/bg_trimmer_border_line.xml" value="0.1585" />
         <entry key="app/src/main/res/drawable/ic_add_gif.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/ic_timeline_trash.xml" value="0.1585" />
+        <entry key="app/src/main/res/drawable/ic_trimmer_left_pointer.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/ic_trimmer_remove.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/ic_trimmer_remove_pressed.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/ic_trimmer_right_pointer.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/ic_trimmer_rotate.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/ic_trimmer_rotate_normal.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/ic_trimmer_rotate_pressed.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/ic_trimmer_trim.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/ic_trimmer_trim_pressed.xml" value="0.155" />
         <entry key="app/src/main/res/layout/acitivity_face_ar.xml" value="0.234375" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.155" />
       </map>
