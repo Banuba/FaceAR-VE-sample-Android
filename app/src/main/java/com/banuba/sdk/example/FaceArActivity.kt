@@ -14,6 +14,7 @@ import com.banuba.sdk.export.data.ExportFlowManager
 import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.gallery.di.GalleryKoinModule
 import com.banuba.sdk.manager.BanubaSdkManager
+import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
 import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
 import com.banuba.sdk.token.storage.provider.TokenProvider
 import com.banuba.sdk.ve.di.VeSdkKoinModule
@@ -75,7 +76,8 @@ class FaceArActivity : AppCompatActivity() {
             TokenStorageKoinModule().module,
             VideoEditorKoinModule().module,
             GalleryKoinModule().module,
-            BanubaEffectPlayerKoinModule().module
+            BanubaEffectPlayerKoinModule().module,
+            VePlaybackSdkKoinModule().module
         )
         loadKoinModules(videoEditorKoinModules)
         tokenProvider.getToken()
