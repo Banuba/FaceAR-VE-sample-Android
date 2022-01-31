@@ -44,7 +44,7 @@ dependencies {
     implementation fileTree(dir: '../libs', include: ['*.aar'])
 
     // Banuba Video Editor SDK dependencies
-    def banubaSdkVersion = '1.20.0'
+    def banubaSdkVersion = '1.21.0'
     implementation "com.banuba.sdk:camera-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:camera-ui-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
@@ -60,4 +60,5 @@ dependencies {
     implementation "com.banuba.sdk:ve-audio-browser-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:ve-export-sdk:${banubaSdkVersion}"
+    implementation "com.banuba.sdk:ve-playback-sdk:${banubaSdkVersion}"
 }
