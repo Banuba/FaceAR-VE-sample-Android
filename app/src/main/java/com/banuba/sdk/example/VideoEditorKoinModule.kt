@@ -31,7 +31,8 @@ class VideoEditorKoinModule : FlowEditorModule() {
             shouldClearSessionOnFinish = true,
             publishManager = get(),
             errorParser = get(),
-            mediaFileNameHelper = get()
+            mediaFileNameHelper = get(),
+            exportBundleProvider = get()
         )
     }
 
