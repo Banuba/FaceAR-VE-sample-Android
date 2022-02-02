@@ -113,7 +113,7 @@ class FaceArActivity : AppCompatActivity() {
 
     private fun initializeFaceAr() {
         BanubaSdkManager.deinitialize()
-        BanubaSdkManager.initialize(applicationContext, getString(R.string.effect_player_token))
+        BanubaSdkManager.initialize(applicationContext, getString(R.string.banuba_token))
         banubaSdkManager = BanubaSdkManager(applicationContext)
     }
 
