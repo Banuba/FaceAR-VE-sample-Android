@@ -5,13 +5,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.banuba.example.integrationapp"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
     }
@@ -44,7 +43,7 @@ dependencies {
     implementation fileTree(dir: '../libs', include: ['*.aar'])
 
     // Banuba Video Editor SDK dependencies
-    def banubaSdkVersion = '1.21.0'
+    def banubaSdkVersion = '1.22.0'
     implementation "com.banuba.sdk:camera-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:camera-ui-sdk:${banubaSdkVersion}"
     implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
