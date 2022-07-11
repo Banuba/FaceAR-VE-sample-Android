@@ -9,8 +9,8 @@ import android.provider.MediaStore
 import android.util.Log
 import com.banuba.sdk.core.ext.getMimeTypeByContentResolver
 import com.banuba.sdk.core.media.MediaFileNameHelper
-import com.banuba.sdk.ve.data.ExportedVideo
-import com.banuba.sdk.ve.data.PublishManager
+import com.banuba.sdk.export.data.ExportedVideo
+import com.banuba.sdk.export.data.PublishManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.io.File
