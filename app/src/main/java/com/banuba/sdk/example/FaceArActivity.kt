@@ -4,16 +4,27 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Size
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.banuba.sdk.arcloud.di.ArCloudKoinModule
 import com.banuba.sdk.audiobrowser.di.AudioBrowserKoinModule
+import com.banuba.sdk.effect_player.EffectPlayer
+import com.banuba.sdk.effect_player.EffectPlayerConfiguration
+import com.banuba.sdk.effect_player.NnMode
 import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule
+import com.banuba.sdk.example.camera.Camera2SimpleHandler
+import com.banuba.sdk.example.camera.Camera2SimpleThread
+import com.banuba.sdk.example.render.CameraRenderHandler
+import com.banuba.sdk.example.render.CameraRenderSurfaceTexture
 import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.gallery.di.GalleryKoinModule
 import com.banuba.sdk.manager.BanubaSdkManager
+import com.banuba.sdk.offscreen.OffscreenEffectPlayer
+import com.banuba.sdk.offscreen.OffscreenSimpleConfig
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
+import com.banuba.sdk.recognizer.FaceSearchMode
 import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
 import com.banuba.sdk.token.storage.license.EditorLicenseManager
 import com.banuba.sdk.ve.di.VeSdkKoinModule
@@ -38,9 +49,19 @@ class FaceArActivity : AppCompatActivity() {
         )
     }
 
-    private var banubaSdkManager: BanubaSdkManager? = null
+    private val size = Size(1280, 720)
+
+    private var effectPlayer: EffectPlayer? = null
+
+    private var offscreenEffectPlayer: OffscreenEffectPlayer? = null
 
     private var videoEditorKoinModules: List<Module> = emptyList()
+
+    private var cameraHandler: Camera2SimpleHandler? = null
+
+    private var renderHandler: CameraRenderHandler? = null
+
+    private var isMaskApplied = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,12 +121,18 @@ class FaceArActivity : AppCompatActivity() {
      */
 
     private fun prepareFaceAR() {
-        if (banubaSdkManager == null) {
+        if (offscreenEffectPlayer == null) {
             initializeFaceAr()
         }
-        banubaSdkManager?.attachSurface(faceArSurfaceView)
+        offscreenEffectPlayer?.let {
+            renderHandler = CameraRenderSurfaceTexture(
+                surfaceHolder = faceArSurfaceView.holder,
+                offscreenEffectPlayer = it,
+                size = size
+            ).startAndGetHandler()
+        }
         if (checkAllPermissionsGranted()) {
-            banubaSdkManager?.openCamera()
+            cameraHandler?.sendOpenCamera()
         } else {
             requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
@@ -114,29 +141,56 @@ class FaceArActivity : AppCompatActivity() {
     private fun initializeFaceAr() {
         BanubaSdkManager.deinitialize()
         BanubaSdkManager.initialize(applicationContext, getString(R.string.banuba_token))
-        banubaSdkManager = BanubaSdkManager(applicationContext)
+        effectPlayer = EffectPlayer.create(
+            EffectPlayerConfiguration(
+                size.width,
+                size.height,
+                NnMode.ENABLE,
+                FaceSearchMode.GOOD,
+                false,
+                false
+            )
+        )?.apply {
+            offscreenEffectPlayer = OffscreenEffectPlayer(
+                applicationContext,
+                this,
+                size,
+                OffscreenSimpleConfig.newBuilder(null).build()
+            ).apply {
+                cameraHandler = Camera2SimpleThread(
+                    context = applicationContext,
+                    offscreenEffectPlayer = this,
+                    preferredPreviewSize = size
+                ).startAndGetHandler()
+            }
+        }
     }
 
     private fun destroyFaceAr() {
-        banubaSdkManager?.closeCamera()
-        banubaSdkManager?.releaseSurface()
-        banubaSdkManager = null
+        cameraHandler?.sendShutdown()
+        renderHandler?.sendShutdown()
+        offscreenEffectPlayer?.release()
+        renderHandler = null
+        offscreenEffectPlayer = null
+        isMaskApplied = false
         BanubaSdkManager.deinitialize()
     }
 
     private fun applyMask() {
-        val effectManager = this.banubaSdkManager?.effectManager ?: return
-        val maskUrl = if (effectManager.current()?.url() != "") {
-            ""
-        } else {
-            Uri.parse(BanubaSdkManager.getResourcesBase())
-                .buildUpon()
-                .appendPath("effects")
-                .appendPath("Beauty")
-                .build()
-                .toString()
+        offscreenEffectPlayer?.let {
+            if (isMaskApplied) {
+                it.unloadEffect()
+            } else {
+                val maskUrl = Uri.parse(BanubaSdkManager.getResourcesBase())
+                    .buildUpon()
+                    .appendPath("effects")
+                    .appendPath("Beauty")
+                    .build()
+                    .toString()
+                it.loadEffect(maskUrl)
+            }
+            isMaskApplied = !isMaskApplied
         }
-        effectManager.loadAsync(maskUrl)
     }
 
     override fun onStart() {
@@ -146,20 +200,10 @@ class FaceArActivity : AppCompatActivity() {
         prepareFaceAR()
     }
 
-    override fun onResume() {
-        super.onResume()
-        banubaSdkManager?.effectPlayer?.playbackPlay()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        banubaSdkManager?.effectPlayer?.playbackPause()
-    }
-
     override fun onStop() {
         super.onStop()
-        banubaSdkManager?.closeCamera()
-        banubaSdkManager?.releaseSurface()
+        cameraHandler?.sendCloseCamera()
+        renderHandler?.sendShutdown()
     }
 
     override fun onDestroy() {
@@ -176,7 +220,7 @@ class FaceArActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, results)
         if (checkAllPermissionsGranted()) {
-            banubaSdkManager?.openCamera()
+            cameraHandler?.sendOpenCamera()
         } else {
             Toast.makeText(applicationContext, "Please grant permission.", Toast.LENGTH_LONG).show()
             finish()
