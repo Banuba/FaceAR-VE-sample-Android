@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import com.banuba.sdk.export.data.ExportResult
 import com.banuba.sdk.export.utils.EXTRA_EXPORTED_SUCCESS
 
-class IntegrationAppExportVideoContract: ActivityResultContract<Intent, ExportResult?>() {
+class IntegrationAppExportVideoContract: ActivityResultContract<Intent?, ExportResult?>() {
 
     override fun createIntent(context: Context, input: Intent?): Intent {
         check(input != null) {
