@@ -19,6 +19,7 @@ import com.banuba.sdk.token.storage.license.EditorLicenseManager
 import com.banuba.sdk.ve.di.VeSdkKoinModule
 import com.banuba.sdk.ve.flow.VideoCreationActivity
 import com.banuba.sdk.ve.flow.di.VeFlowKoinModule
+import com.banuba.sdk.veui.di.VeUiSdkKoinModule
 import kotlinx.android.synthetic.main.acitivity_face_ar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -72,6 +73,7 @@ class FaceArActivity : AppCompatActivity() {
             AudioBrowserKoinModule().module, // use this module only if you bought it
             ArCloudKoinModule().module,
             TokenStorageKoinModule().module,
+            VeUiSdkKoinModule().module,
             VeFlowKoinModule().module,
             VideoEditorKoinModule().module,
             GalleryKoinModule().module,
