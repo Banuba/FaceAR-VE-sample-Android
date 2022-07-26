@@ -14,7 +14,7 @@ class VideoEditorKoinModule {
 
     val module = module {
 
-        single(override = true) {
+        single {
             ForegroundExportFlowManager(
                 exportDataProvider = get(),
                 sessionParamsProvider = get(),
@@ -28,7 +28,7 @@ class VideoEditorKoinModule {
             )
         }
 
-        single(override = true) {
+        single {
             ExternalPublishManager(
                 context = get<Application>().applicationContext,
                 albumName = "Banuba",
@@ -37,7 +37,7 @@ class VideoEditorKoinModule {
             )
         }
 
-        single(override = true, createdAtStart = true) {
+        single(createdAtStart = true) {
             ArEffectsRepositoryProvider(
                 arEffectsRepository = get(named("backendArEffectsRepository")),
                 ioDispatcher = get(named("ioDispatcher"))
@@ -45,25 +45,25 @@ class VideoEditorKoinModule {
         }
 
 
-        factory(override = true) {
+        factory {
             IntegrationTimerStateProvider()
         }
 
 
-        single(named("musicTrackProvider"), override = true) {
+        single(named("musicTrackProvider")) {
             AudioBrowserMusicProvider()
         }
 
-        single(override = true) {
+        single {
             CoverProvider.EXTENDED
         }
 
 
-        single(override = true) {
+        single {
             HandsFreeTimerActionProvider()
         }
 
-        factory(override = true) {
+        factory {
             DraftConfig.ENABLED_ASK_TO_SAVE
         }
     }
