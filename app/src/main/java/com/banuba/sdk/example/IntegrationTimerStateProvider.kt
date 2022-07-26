@@ -7,12 +7,10 @@ class IntegrationTimerStateProvider : CameraTimerStateProvider {
 
     override val timerStates = listOf(
         TimerEntry(
-            durationMs = 0,
-            iconResId = R.drawable.ic_stopwatch_off
+            durationMs = 0
         ),
         TimerEntry(
-            durationMs = 3000,
-            iconResId = R.drawable.ic_stopwatch_on
+            durationMs = 3000
         )
     )
 }
