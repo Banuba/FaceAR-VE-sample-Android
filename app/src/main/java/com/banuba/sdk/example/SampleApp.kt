@@ -10,6 +10,7 @@ class SampleApp : Application() {
 
         startKoin {
             androidContext(applicationContext)
+            allowOverride(true)
         }
     }
 }
