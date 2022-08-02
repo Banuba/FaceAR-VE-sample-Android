@@ -17,8 +17,9 @@
         android:theme="@style/Theme.SampleFaceArVE">
 
         <activity
-            android:name=".FaceArActivity"
-            android:screenOrientation="portrait">
+            android:name=".FaceArCameraActivity"
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

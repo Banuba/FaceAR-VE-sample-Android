@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <SurfaceView
+        android:id="@+id/faceArSurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/recordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/bg_red_circle" />
+
+    <TextView
+        android:id="@+id/countOfVideos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/removeLastVideoButton"
+        app:layout_constraintEnd_toEndOf="@+id/recordButton"
+        app:layout_constraintStart_toStartOf="@+id/recordButton"
+        tools:text="1" />
+
+    <ImageView
+        android:id="@+id/removeLastVideoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_remove_video_part"
+        app:layout_constraintBottom_toTopOf="@+id/recordButton"
+        app:layout_constraintEnd_toEndOf="@+id/recordButton"
+        app:layout_constraintStart_toStartOf="@+id/recordButton" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/actionBtnGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/effectsBtnGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <ImageView
+        android:id="@+id/cameraSwitchButton"
+        android:layout_width="@dimen/camera_action_button_width"
+        android:layout_height="@dimen/camera_action_button_height"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/ic_camera_switch"
+        app:layout_constraintEnd_toEndOf="@+id/actionBtnGuideline"
+        app:layout_constraintStart_toStartOf="@+id/actionBtnGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/cameraMicButton"
+        android:layout_width="@dimen/camera_action_button_width"
+        android:layout_height="@dimen/camera_action_button_height"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/ic_camera_mic"
+        android:checked="true"
+        android:button="@null"
+        app:layout_constraintEnd_toEndOf="@+id/actionBtnGuideline"
+        app:layout_constraintStart_toStartOf="@+id/actionBtnGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/cameraSwitchButton" />
+
+    <TextView
+        android:id="@+id/cameraSpeedButton"
+        android:layout_width="@dimen/camera_action_button_width"
+        android:layout_height="@dimen/camera_action_button_height"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/roboto_bold"
+        android:gravity="center"
+        android:text="0.5"
+        android:textColor="@color/white"
+        android:textSize="19sp"
+        app:layout_constraintEnd_toEndOf="@+id/actionBtnGuideline"
+        app:layout_constraintStart_toStartOf="@+id/actionBtnGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/cameraMicButton" />
+
+
+    <CheckBox
+        android:id="@+id/applyMaskButton"
+        android:layout_width="@dimen/camera_action_button_width"
+        android:layout_height="@dimen/camera_action_button_height"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/ic_camera_mask"
+        android:button="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/recordButton"
+        app:layout_constraintEnd_toEndOf="@+id/effectsBtnGuideline"
+        app:layout_constraintStart_toStartOf="@+id/effectsBtnGuideline"
+        app:layout_constraintTop_toTopOf="@+id/recordButton" />
+
+    <CheckBox
+        android:id="@+id/applyBeautyButton"
+        android:layout_width="@dimen/camera_action_button_width"
+        android:layout_height="@dimen/camera_action_button_height"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/ic_camera_beauty_on"
+        android:background="@drawable/ic_camera_beauty"
+        android:button="@null"
+        app:layout_constraintBottom_toTopOf="@+id/applyMaskButton"
+        app:layout_constraintEnd_toEndOf="@+id/effectsBtnGuideline"
+        app:layout_constraintStart_toStartOf="@+id/effectsBtnGuideline" />
+
+    <ImageView
+        android:id="@+id/galleryButton"
+        android:layout_width="@dimen/camera_action_button_width"
+        android:layout_height="@dimen/camera_action_button_height"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/ic_camera_gallery"
+        app:layout_constraintBottom_toBottomOf="@+id/recordButton"
+        app:layout_constraintEnd_toEndOf="@+id/actionBtnGuideline"
+        app:layout_constraintStart_toStartOf="@+id/actionBtnGuideline"
+        app:layout_constraintTop_toTopOf="@+id/recordButton" />
+
+    <Button
+        android:id="@+id/openEditorButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Next"
+        app:layout_constraintBottom_toBottomOf="@+id/recordButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recordButton" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
