@@ -7,27 +7,13 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.banuba.sdk.arcloud.di.ArCloudKoinModule
-import com.banuba.sdk.audiobrowser.di.AudioBrowserKoinModule
-import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule
-import com.banuba.sdk.export.di.VeExportKoinModule
-import com.banuba.sdk.gallery.di.GalleryKoinModule
 import com.banuba.sdk.manager.BanubaSdkManager
-import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
-import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
 import com.banuba.sdk.token.storage.license.EditorLicenseManager
-import com.banuba.sdk.ve.di.VeSdkKoinModule
 import com.banuba.sdk.ve.flow.VideoCreationActivity
-import com.banuba.sdk.ve.flow.di.VeFlowKoinModule
-import com.banuba.sdk.veui.di.VeUiSdkKoinModule
 import kotlinx.android.synthetic.main.acitivity_face_ar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.context.loadKoinModules
-import org.koin.core.context.stopKoin
-import org.koin.core.context.unloadKoinModules
-import org.koin.core.module.Module
 
 class FaceArActivity : AppCompatActivity() {
 
@@ -40,8 +26,6 @@ class FaceArActivity : AppCompatActivity() {
     }
 
     private var banubaSdkManager: BanubaSdkManager? = null
-
-    private var videoEditorKoinModules: List<Module> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,41 +42,14 @@ class FaceArActivity : AppCompatActivity() {
     /*
      * Banuba Video Editor SDK specific code
      */
-    private fun releaseVideoEditor() {
-        if (videoEditorKoinModules.isNotEmpty()) {
-            destroyEditor()
-        }
-    }
-
-
-    private fun initializeEditor() {
-        videoEditorKoinModules = listOf(
-            VeSdkKoinModule().module,
-            VeExportKoinModule().module,
-            VePlaybackSdkKoinModule().module,
-            AudioBrowserKoinModule().module, // use this module only if you bought it
-            ArCloudKoinModule().module,
-            TokenStorageKoinModule().module,
-            VeUiSdkKoinModule().module,
-            VeFlowKoinModule().module,
-            VideoEditorKoinModule().module,
-            GalleryKoinModule().module,
-            BanubaEffectPlayerKoinModule().module,
-        )
-        loadKoinModules(videoEditorKoinModules)
-        CoroutineScope(Dispatchers.Main.immediate).launch {
-            EditorLicenseManager.initialize(getString(R.string.banuba_token))
-        }
-    }
-
-    private fun destroyEditor() {
-        unloadKoinModules(videoEditorKoinModules)
-        videoEditorKoinModules = emptyList()
-    }
 
     private fun openVideoEditor() {
         destroyFaceAr()
-        initializeEditor()
+
+        CoroutineScope(Dispatchers.Main.immediate).launch {
+            EditorLicenseManager.initialize(getString(R.string.banuba_token))
+        }
+
         val intent = VideoCreationActivity.startFromCamera(this)
         startActivity(intent)
     }
@@ -143,8 +100,6 @@ class FaceArActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        releaseVideoEditor()
-
         prepareFaceAR()
     }
 
@@ -167,8 +122,6 @@ class FaceArActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         destroyFaceAr()
-        destroyEditor()
-        stopKoin()
     }
 
     override fun onRequestPermissionsResult(
