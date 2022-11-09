@@ -122,7 +122,7 @@ class OffscreenActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                startCameraPreview()
+                handleGrantedPermissions()
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, results)
