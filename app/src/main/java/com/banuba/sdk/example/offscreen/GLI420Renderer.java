@@ -36,13 +36,14 @@ public class GLI420Renderer implements GLSurfaceView.Renderer {
                     "in vec2 vTexCoord;\n" +
                     "out vec4 outFragColor;\n" +
                     "void main() {\n" +
-                    "  float y = texture(uTextureY, vTexCoord).x;\n" +
-                    "  float u = texture(uTextureU, vTexCoord).x - 0.5;\n" +
-                    "  float v = texture(uTextureV, vTexCoord).x - 0.5;\n" +
-                    "  float r = y + 1.402 * v;\n" +
-                    "  float g = y - 0.344 * u - 0.714 * v;\n" +
-                    "  float b = y + 1.772 * u;\n" +
-                    "  outFragColor = vec4(r, g, b, 1.0f);\n" +
+                    "  float y = texture(uTextureY, vTexCoord).x * 1.164383562f;\n" +
+                    "  float u = texture(uTextureU, vTexCoord).x;\n" +
+                    "  float v = texture(uTextureV, vTexCoord).x;\n" +
+                    "  outFragColor = vec4(\n" +
+                    "    y + 1.5960267860f * v - 0.8742022179f,\n" +
+                    "    y - 0.3917622901f * u - 0.8129676472f * v + 0.5316678235f,\n" +
+                    "    y + 2.0172321430f * u - 1.0856307890f,\n" +
+                    "    1.0f);\n" +
                     "}\n";
 
     /* input YUV image to draw */
@@ -242,13 +243,13 @@ public class GLI420Renderer implements GLSurfaceView.Renderer {
             /* update texture */
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTexture[i]);
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0 + i);
-            GLES20.glPixelStorei(GLES20.GL_UNPACK_ALIGNMENT, stride);
+            GLES30.glPixelStorei(GLES30.GL_UNPACK_ROW_LENGTH, stride);
             GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_LUMINANCE, width, height, 0, GLES20.GL_LUMINANCE, GLES20.GL_UNSIGNED_BYTE, data);
 
             /* set uniforms */
             mShaderProgram.setUniformTexture(mUniformTexture[i], i);
         }
-        GLES20.glPixelStorei(GLES20.GL_UNPACK_ALIGNMENT, 0);
+        GLES30.glPixelStorei(GLES30.GL_UNPACK_ROW_LENGTH, 0);
         mShaderProgram.setUniformMat4(mUniformMatrix, mat4);
 
         /* draw */
