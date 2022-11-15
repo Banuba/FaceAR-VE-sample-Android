@@ -36,13 +36,14 @@ public class GLI420Renderer implements GLSurfaceView.Renderer {
                     "in vec2 vTexCoord;\n" +
                     "out vec4 outFragColor;\n" +
                     "void main() {\n" +
-                    "  float y = texture(uTextureY, vTexCoord).x;\n" +
-                    "  float u = texture(uTextureU, vTexCoord).x - 0.5;\n" +
-                    "  float v = texture(uTextureV, vTexCoord).x - 0.5;\n" +
-                    "  float r = y + 1.402 * v;\n" +
-                    "  float g = y - 0.344 * u - 0.714 * v;\n" +
-                    "  float b = y + 1.772 * u;\n" +
-                    "  outFragColor = vec4(r, g, b, 1.0f);\n" +
+                    "  float y = texture(uTextureY, vTexCoord).x * 1.164383562f;\n" +
+                    "  float u = texture(uTextureU, vTexCoord).x;\n" +
+                    "  float v = texture(uTextureV, vTexCoord).x;\n" +
+                    "  outFragColor = vec4(\n" +
+                    "    y + 1.5960267860f * v - 0.8742022179f,\n" +
+                    "    y - 0.3917622901f * u - 0.8129676472f * v + 0.5316678235f,\n" +
+                    "    y + 2.0172321430f * u - 1.0856307890f,\n" +
+                    "    1.0f);\n" +
                     "}\n";
 
     /* input YUV image to draw */

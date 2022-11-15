@@ -13,7 +13,6 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.banuba.sdk.cameraui.data.PipConfig
 import com.banuba.sdk.effect_player.ConsistencyMode
 import com.banuba.sdk.effect_player.EffectPlayer
 import com.banuba.sdk.effect_player.EffectPlayerConfiguration
@@ -24,7 +23,6 @@ import com.banuba.sdk.offscreen.ImageProcessResult
 import com.banuba.sdk.offscreen.OffscreenEffectPlayer
 import com.banuba.sdk.offscreen.OffscreenSimpleConfig
 import com.banuba.sdk.recognizer.FaceSearchMode
-import com.banuba.sdk.ve.flow.VideoCreationActivity
 import java.io.File
 import java.nio.ByteBuffer
 
@@ -32,8 +30,6 @@ class OffscreenActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "OffscreenActivity"
-
-        private const val VIDEO_EDITOR_REQUEST_CODE = 7788
 
         private const val REQUEST_CODE_PERMISSIONS = 1001
 
@@ -79,10 +75,6 @@ class OffscreenActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.loadEffect).setOnClickListener {
             toggleEffect()
-        }
-
-        findViewById<Button>(R.id.startVideoEditorButton).setOnClickListener {
-            startVideoEditor()
         }
     }
 
@@ -136,26 +128,6 @@ class OffscreenActivity : AppCompatActivity() {
         } else {
             offscreenEffectPlayer?.unloadEffect()
         }
-    }
-
-    private fun startVideoEditor() {
-        Log.d(TAG, "Start Video Editor")
-        releaseOffscreen()
-
-        startActivityForResult(
-            VideoCreationActivity.startFromCamera(
-                context = this,
-                // setup data that will be acceptable during export flow
-                additionalExportData = null,
-                // set TrackData object if you open VideoCreationActivity with preselected music track
-                audioTrackData = null,
-                // set PiP video configuration
-                pictureInPictureConfig = PipConfig(
-                    video = Uri.EMPTY,
-                    openPipSettings = false
-                )
-            ), VIDEO_EDITOR_REQUEST_CODE
-        )
     }
 
     private fun prepareOffscreen() {

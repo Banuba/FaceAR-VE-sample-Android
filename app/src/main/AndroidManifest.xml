@@ -14,7 +14,7 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SampleFaceArVE">
+        android:theme="@style/AppTheme" >
 
         <activity
             android:name=".MainActivity"
@@ -36,13 +36,6 @@
             android:name=".offscreen.OffscreenActivity"
             android:label="Offscreen Face AR and Video Editor"
             android:screenOrientation="portrait"/>
-
-        <activity
-            android:name="com.banuba.sdk.ve.flow.VideoCreationActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/IntegrationAppTheme"
-            android:windowSoftInputMode="adjustResize"
-            tools:replace="android:theme" />
 
     </application>
 </manifest>

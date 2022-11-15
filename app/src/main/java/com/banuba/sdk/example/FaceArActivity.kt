@@ -8,12 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.banuba.sdk.manager.BanubaSdkManager
-import com.banuba.sdk.token.storage.license.EditorLicenseManager
-import com.banuba.sdk.ve.flow.VideoCreationActivity
 import kotlinx.android.synthetic.main.acitivity_face_ar.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class FaceArActivity : AppCompatActivity() {
 
@@ -34,24 +29,6 @@ class FaceArActivity : AppCompatActivity() {
         faceArApplyMaskButton.setOnClickListener {
             applyMask()
         }
-        faceArOpenEditorButton.setOnClickListener {
-            openVideoEditor()
-        }
-    }
-
-    /*
-     * Banuba Video Editor SDK specific code
-     */
-
-    private fun openVideoEditor() {
-        destroyFaceAr()
-
-        CoroutineScope(Dispatchers.Main.immediate).launch {
-            EditorLicenseManager.initialize(getString(R.string.banuba_token))
-        }
-
-        val intent = VideoCreationActivity.startFromCamera(this)
-        startActivity(intent)
     }
 
     /**

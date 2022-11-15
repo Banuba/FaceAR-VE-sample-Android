@@ -41,24 +41,8 @@ dependencies {
 
     // Banuba Face AR SDK dependencies
     implementation fileTree(dir: '../libs', include: ['*.aar'])
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
 
     // Banuba Video Editor SDK dependencies
-    def banubaSdkVersion = '1.24.2'
-    implementation "com.banuba.sdk:ffmpeg:4.4"
-    implementation "com.banuba.sdk:camera-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:camera-ui-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:core-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:core-ui-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:ve-flow-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:ve-timeline-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:ve-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:ve-ui-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:ve-gallery-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:ve-effects-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:effect-player-adapter:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:ar-cloud:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:ve-audio-browser-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:banuba-token-storage-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:ve-export-sdk:${banubaSdkVersion}"
-    implementation "com.banuba.sdk:ve-playback-sdk:${banubaSdkVersion}"
 }
