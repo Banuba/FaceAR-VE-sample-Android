@@ -1,16 +1,14 @@
 package com.banuba.sdk.example
 
 import android.Manifest
+import android.app.Application
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.banuba.sdk.manager.BanubaSdkManager
-import com.banuba.sdk.token.storage.license.EditorLicenseManager
-import com.banuba.sdk.ve.flow.VideoCreationActivity
 import kotlinx.android.synthetic.main.acitivity_face_ar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +29,8 @@ class FaceArActivity : AppCompatActivity() {
     private var banubaSdkManager: BanubaSdkManager? = null
     private val effectHelper = BanubaEffectHelper()
 
+    private val videoEditorLauncher = registerForActivityResult<Application, String?>(VideoEditorLaunchContract()) {}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.acitivity_face_ar)
@@ -50,12 +50,11 @@ class FaceArActivity : AppCompatActivity() {
     private fun openVideoEditor() {
         destroyFaceAr()
 
-        CoroutineScope(Dispatchers.Main.immediate).launch {
-            EditorLicenseManager.initialize(getString(R.string.banuba_token))
-        }
+      /* CoroutineScope(Dispatchers.Main.immediate).launch {
+           EditorLicenseManager.initialize(getString(R.string.banuba_token))
+        }*/
 
-        val intent = VideoCreationActivity.startFromCamera(this)
-        startActivity(intent)
+        videoEditorLauncher.launch(application)
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.banuba.sdk.example.offscreen
 
 import android.Manifest
+import android.app.Application
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.os.Handler
@@ -13,26 +13,23 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.banuba.sdk.cameraui.data.PipConfig
 import com.banuba.sdk.effect_player.ConsistencyMode
 import com.banuba.sdk.effect_player.EffectPlayer
 import com.banuba.sdk.effect_player.EffectPlayerConfiguration
 import com.banuba.sdk.effect_player.NnMode
 import com.banuba.sdk.example.BanubaEffectHelper
 import com.banuba.sdk.example.R
+import com.banuba.sdk.example.VideoEditorLaunchContract
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.offscreen.ImageProcessResult
 import com.banuba.sdk.offscreen.OffscreenEffectPlayer
 import com.banuba.sdk.offscreen.OffscreenSimpleConfig
 import com.banuba.sdk.recognizer.FaceSearchMode
-import com.banuba.sdk.ve.flow.VideoCreationActivity
 
 class OffscreenActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "OffscreenActivity"
-
-        private const val VIDEO_EDITOR_REQUEST_CODE = 7788
 
         private const val REQUEST_CODE_PERMISSIONS = 1001
 
@@ -54,6 +51,10 @@ class OffscreenActivity : AppCompatActivity() {
     private var loadEffect = false
 
     private val effectHelper = BanubaEffectHelper()
+
+    private val videoEditorLauncher = registerForActivityResult<Application, String?>(
+        VideoEditorLaunchContract()
+    ) {}
 
     private val frameReadyCallback =
         Camera2Simple.FrameReadyCallback { image, imageOrientation ->
@@ -139,20 +140,7 @@ class OffscreenActivity : AppCompatActivity() {
         Log.d(TAG, "Start Video Editor")
         releaseOffscreen()
 
-        startActivityForResult(
-            VideoCreationActivity.startFromCamera(
-                context = this,
-                // setup data that will be acceptable during export flow
-                additionalExportData = null,
-                // set TrackData object if you open VideoCreationActivity with preselected music track
-                audioTrackData = null,
-                // set PiP video configuration
-                pictureInPictureConfig = PipConfig(
-                    video = Uri.EMPTY,
-                    openPipSettings = false
-                )
-            ), VIDEO_EDITOR_REQUEST_CODE
-        )
+        videoEditorLauncher.launch(application)
     }
 
     private fun prepareOffscreen() {

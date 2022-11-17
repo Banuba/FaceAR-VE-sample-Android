@@ -13,11 +13,11 @@ import com.banuba.sdk.ve.flow.di.VeFlowKoinModule
 import com.banuba.sdk.veui.di.VeUiSdkKoinModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 
 class SampleApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
 
+    fun prepareVideoEditor() {
         // Initialize Video Editor
         startKoin {
             androidContext(applicationContext)
@@ -45,5 +45,9 @@ class SampleApp : Application() {
                 VideoEditorKoinModule().module,
             )
         }
+    }
+
+    fun releaseVideoEditor() {
+        stopKoin()
     }
 }
