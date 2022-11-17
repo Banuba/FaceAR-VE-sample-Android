@@ -228,35 +228,13 @@ class OffscreenActivity : AppCompatActivity() {
     }
 
     private fun handleProcessedImageResult(result: ImageProcessResult) {
-        val buffer: ByteBuffer = result.buffer
-        buffersQueue.retainBuffer(buffer)
-
-        buffer.position(result.getPlaneOffset(0))
-
-        val strideY: Int = result.getRowStride(0)
-        buffer.limit(result.getPlaneOffset(0) + strideY * result.getPlaneHeight(0))
-
-        val dataY: ByteBuffer = buffer.slice()
-        buffer.position(result.getPlaneOffset(1))
-
-        val strideU: Int = result.getRowStride(1)
-        buffer.limit(result.getPlaneOffset(1) + strideU * result.getPlaneHeight(1))
-
-        val dataU: ByteBuffer = buffer.slice()
-        buffer.position(result.getPlaneOffset(2))
-
-        val strideV: Int = result.getRowStride(2)
-        buffer.limit(result.getPlaneOffset(2) + strideV * result.getPlaneHeight(2))
-
-        val dataV: ByteBuffer = buffer.slice()
-        val width: Int = result.width
-        val height: Int = result.height
+        buffersQueue.retainBuffer(result.buffer)
 
         glI420Renderer.drawI420Image(
-            dataY, strideY,
-            dataU, strideU,
-            dataV, strideV,
-            width, height,
+            result.getPlaneBuffer(0), result.getBytesPerRowOfPlane(0),
+            result.getPlaneBuffer(1), result.getBytesPerRowOfPlane(1),
+            result.getPlaneBuffer(2), result.getBytesPerRowOfPlane(2),
+            result.width, result.height,
             result.orientation.imageOrientationAngle
         )
         glSurfaceView?.requestRender()
