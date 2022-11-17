@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -20,12 +21,15 @@ class FaceArActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 1001
 
+        private const val EFFECT_NAME = "Beauty"
+
         private val REQUIRED_PERMISSIONS = arrayOf(
             Manifest.permission.CAMERA,
         )
     }
 
     private var banubaSdkManager: BanubaSdkManager? = null
+    private val effectHelper = BanubaEffectHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,18 +88,18 @@ class FaceArActivity : AppCompatActivity() {
     }
 
     private fun applyMask() {
-        val effectManager = this.banubaSdkManager?.effectManager ?: return
-        val maskUrl = if (effectManager.current()?.url() != "") {
-            ""
+        val manager = banubaSdkManager?.effectManager
+        if (manager == null) {
+            Log.w(
+                "FaceArActivity",
+                "Cannot apply effect: Banuba Face AR Effect Player is not initialized"
+            )
         } else {
-            Uri.parse(BanubaSdkManager.getResourcesBase())
-                .buildUpon()
-                .appendPath("effects")
-                .appendPath("Beauty")
-                .build()
-                .toString()
+            CoroutineScope(Dispatchers.IO).launch {
+                val effect = effectHelper.prepareEffect(assets, EFFECT_NAME)
+                manager.loadAsync(effect.uri.toString())
+            }
         }
-        effectManager.loadAsync(maskUrl)
     }
 
     override fun onStart() {

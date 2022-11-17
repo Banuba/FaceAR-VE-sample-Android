@@ -18,6 +18,7 @@ import com.banuba.sdk.effect_player.ConsistencyMode
 import com.banuba.sdk.effect_player.EffectPlayer
 import com.banuba.sdk.effect_player.EffectPlayerConfiguration
 import com.banuba.sdk.effect_player.NnMode
+import com.banuba.sdk.example.BanubaEffectHelper
 import com.banuba.sdk.example.R
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.offscreen.ImageProcessResult
@@ -25,8 +26,6 @@ import com.banuba.sdk.offscreen.OffscreenEffectPlayer
 import com.banuba.sdk.offscreen.OffscreenSimpleConfig
 import com.banuba.sdk.recognizer.FaceSearchMode
 import com.banuba.sdk.ve.flow.VideoCreationActivity
-import java.io.File
-import java.nio.ByteBuffer
 
 class OffscreenActivity : AppCompatActivity() {
 
@@ -54,10 +53,7 @@ class OffscreenActivity : AppCompatActivity() {
     private var glSurfaceView: GLSurfaceView? = null
     private var loadEffect = false
 
-    private val effectFilePath: String by lazy(LazyThreadSafetyMode.NONE) {
-        val pathToEffects = File(this.filesDir, "banuba/bnb-resources/effects")
-        File(pathToEffects, SAMPLE_EFFECT_NAME).toString()
-    }
+    private val effectHelper = BanubaEffectHelper()
 
     private val frameReadyCallback =
         Camera2Simple.FrameReadyCallback { image, imageOrientation ->
@@ -132,7 +128,8 @@ class OffscreenActivity : AppCompatActivity() {
     private fun toggleEffect() {
         loadEffect = !loadEffect
         if (loadEffect) {
-            offscreenEffectPlayer?.loadEffect(effectFilePath)
+            val effect = effectHelper.prepareEffect(assets, SAMPLE_EFFECT_NAME)
+            offscreenEffectPlayer?.loadEffect(effect.uri.toString())
         } else {
             offscreenEffectPlayer?.unloadEffect()
         }
