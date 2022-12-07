@@ -182,10 +182,7 @@ class OffscreenActivity : AppCompatActivity() {
 
     private fun releaseOffscreen() {
         Log.d(TAG, "Release Offscreen")
-        if (offscreenEffectPlayer != null) {
-            offscreenEffectPlayer = null
-        }
-
+        offscreenEffectPlayer = null
         BanubaSdkManager.deinitialize()
     }
 
