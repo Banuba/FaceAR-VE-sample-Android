@@ -183,8 +183,6 @@ class OffscreenActivity : AppCompatActivity() {
     private fun releaseOffscreen() {
         Log.d(TAG, "Release Offscreen")
         if (offscreenEffectPlayer != null) {
-            offscreenEffectPlayer?.unloadEffect()
-            offscreenEffectPlayer?.release()
             offscreenEffectPlayer = null
         }
 
