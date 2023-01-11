@@ -50,10 +50,6 @@ class FaceArActivity : AppCompatActivity() {
     private fun openVideoEditor() {
         destroyFaceAr()
 
-      /* CoroutineScope(Dispatchers.Main.immediate).launch {
-           EditorLicenseManager.initialize(getString(R.string.banuba_token))
-        }*/
-
         videoEditorLauncher.launch(application)
     }
 
