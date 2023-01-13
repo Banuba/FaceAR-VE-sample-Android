@@ -19,6 +19,7 @@ import com.banuba.sdk.effect_player.EffectPlayerConfiguration
 import com.banuba.sdk.effect_player.NnMode
 import com.banuba.sdk.example.BanubaEffectHelper
 import com.banuba.sdk.example.R
+import com.banuba.sdk.example.SampleApp
 import com.banuba.sdk.example.VideoEditorLaunchContract
 import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.offscreen.ImageProcessResult
@@ -152,7 +153,7 @@ class OffscreenActivity : AppCompatActivity() {
         )
 
         BanubaSdkManager.deinitialize()
-        BanubaSdkManager.initialize(applicationContext, getString(R.string.banuba_token))
+        BanubaSdkManager.initialize(applicationContext, SampleApp.LICENSE_TOKEN)
 
         val effectPlayerConfig = EffectPlayerConfiguration(
             CAMERA_CAPTURE_SIZE.width,

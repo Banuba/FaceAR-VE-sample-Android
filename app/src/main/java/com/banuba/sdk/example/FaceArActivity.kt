@@ -71,7 +71,7 @@ class FaceArActivity : AppCompatActivity() {
 
     private fun initializeFaceAr() {
         BanubaSdkManager.deinitialize()
-        BanubaSdkManager.initialize(applicationContext, getString(R.string.banuba_token))
+        BanubaSdkManager.initialize(applicationContext, SampleApp.LICENSE_TOKEN)
         banubaSdkManager = BanubaSdkManager(applicationContext)
     }
 
