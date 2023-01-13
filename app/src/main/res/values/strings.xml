@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sample FaceAR-VE</string>
+    <string name="app_name">Face AR and Video Editor sample</string>
 
     <!-- AUDIO BROWSER MUBERT -->
     <string name="mubert_api_key">PUT YOUR PERSONAL MUBERT KEY</string>

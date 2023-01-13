@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val videoEditor = (application as SampleApp).videoEditor
         if (videoEditor == null) {
             Log.e(
-                "BanubaVideoEditor",
+                SampleApp.TAG,
                 "Cannot check license state. Please initialize Video Editor SDK"
             )
             showLicenseErrorMessage(SampleApp.ERR_SDK_NOT_INITIALIZED)
