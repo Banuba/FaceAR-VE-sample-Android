@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import com.banuba.sdk.effect_player.ConsistencyMode
 import com.banuba.sdk.effect_player.EffectPlayer
 import com.banuba.sdk.effect_player.EffectPlayerConfiguration
-import com.banuba.sdk.effect_player.NnMode
 import com.banuba.sdk.example.BanubaEffectHelper
 import com.banuba.sdk.example.R
 import com.banuba.sdk.example.SampleApp
@@ -25,7 +24,6 @@ import com.banuba.sdk.manager.BanubaSdkManager
 import com.banuba.sdk.offscreen.ImageProcessResult
 import com.banuba.sdk.offscreen.OffscreenEffectPlayer
 import com.banuba.sdk.offscreen.OffscreenSimpleConfig
-import com.banuba.sdk.recognizer.FaceSearchMode
 
 class OffscreenActivity : AppCompatActivity() {
 
@@ -155,13 +153,9 @@ class OffscreenActivity : AppCompatActivity() {
         BanubaSdkManager.deinitialize()
         BanubaSdkManager.initialize(applicationContext, SampleApp.LICENSE_TOKEN)
 
-        val effectPlayerConfig = EffectPlayerConfiguration(
+        val effectPlayerConfig = EffectPlayerConfiguration.create(
             CAMERA_CAPTURE_SIZE.width,
-            CAMERA_CAPTURE_SIZE.height,
-            NnMode.ENABLE,
-            FaceSearchMode.MEDIUM,
-            false,
-            false
+            CAMERA_CAPTURE_SIZE.height
         )
 
         offscreenEffectPlayer = EffectPlayer.create(effectPlayerConfig)?.let { player ->
