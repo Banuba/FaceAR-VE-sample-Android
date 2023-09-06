@@ -43,12 +43,6 @@ class VideoEditorKoinModule {
             )
         }
 
-
-        factory {
-            IntegrationTimerStateProvider()
-        }
-
-
         single(named("musicTrackProvider")) {
             AudioBrowserMusicProvider()
         }
