@@ -36,7 +36,7 @@
         android:textStyle="bold"
         android:textSize="16sp"
         android:gravity="center"
-        android:textColor="@color/red"
+        android:textColor="@color/warning"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
         app:layout_constraintEnd_toEndOf="parent"
