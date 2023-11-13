@@ -4,13 +4,12 @@ import android.app.Application
 import android.util.Log
 import com.banuba.sdk.arcloud.di.ArCloudKoinModule
 import com.banuba.sdk.audiobrowser.di.AudioBrowserKoinModule
+import com.banuba.sdk.core.license.BanubaVideoEditor
 import com.banuba.sdk.effectplayer.adapter.BanubaEffectPlayerKoinModule
 import com.banuba.sdk.export.di.VeExportKoinModule
 import com.banuba.sdk.gallery.di.GalleryKoinModule
-import com.banuba.sdk.manager.BanubaSdkManager
+
 import com.banuba.sdk.playback.di.VePlaybackSdkKoinModule
-import com.banuba.sdk.token.storage.di.TokenStorageKoinModule
-import com.banuba.sdk.token.storage.license.BanubaVideoEditor
 import com.banuba.sdk.ve.di.VeSdkKoinModule
 import com.banuba.sdk.ve.flow.di.VeFlowKoinModule
 import com.banuba.sdk.veui.di.VeUiSdkKoinModule
@@ -60,7 +59,6 @@ class SampleApp : Application() {
                 // IMPORTANT! ArCloudKoinModule should be set before TokenStorageKoinModule to get effects from the cloud
                 ArCloudKoinModule().module,
 
-                TokenStorageKoinModule().module,
                 VeUiSdkKoinModule().module,
                 VeFlowKoinModule().module,
                 BanubaEffectPlayerKoinModule().module,
