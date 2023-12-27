@@ -5,22 +5,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.banuba.sdk.example.databinding.ActivityMainBinding
 import com.banuba.sdk.example.offscreen.OffscreenActivity
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        startFaceAR.setOnClickListener {
+        binding.startFaceAR.setOnClickListener {
             checkVideoEditorLicenseState {
                 startActivity(Intent(applicationContext, FaceArActivity::class.java))
             }
         }
 
-        startOffscreenFaceAR.setOnClickListener {
+        binding.startOffscreenFaceAR.setOnClickListener {
             checkVideoEditorLicenseState {
                 startActivity(Intent(applicationContext, OffscreenActivity::class.java))
             }
@@ -55,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLicenseErrorMessage(msg: String) {
-        licenseErrorMessageView.run {
+        binding.licenseErrorMessageView.run {
             text = msg
             visibility = View.VISIBLE
         }
