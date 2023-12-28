@@ -8,8 +8,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.banuba.sdk.example.databinding.AcitivityFaceArBinding
 import com.banuba.sdk.manager.BanubaSdkManager
-import kotlinx.android.synthetic.main.acitivity_face_ar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +26,8 @@ class FaceArActivity : AppCompatActivity() {
         )
     }
 
+    private lateinit var binding: AcitivityFaceArBinding
+
     private var banubaSdkManager: BanubaSdkManager? = null
     private val effectHelper = BanubaEffectHelper()
 
@@ -33,12 +35,14 @@ class FaceArActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.acitivity_face_ar)
+        binding = AcitivityFaceArBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        faceArApplyMaskButton.setOnClickListener {
+        binding.faceArApplyMaskButton.setOnClickListener {
             applyMask()
         }
-        faceArOpenEditorButton.setOnClickListener {
+        binding.faceArOpenEditorButton.setOnClickListener {
             openVideoEditor()
         }
     }
@@ -61,7 +65,7 @@ class FaceArActivity : AppCompatActivity() {
         if (banubaSdkManager == null) {
             initializeFaceAr()
         }
-        banubaSdkManager?.attachSurface(faceArSurfaceView)
+        banubaSdkManager?.attachSurface(binding.faceArSurfaceView)
         if (checkAllPermissionsGranted()) {
             banubaSdkManager?.openCamera()
         } else {
