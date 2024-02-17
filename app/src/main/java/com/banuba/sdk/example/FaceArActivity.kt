@@ -19,7 +19,7 @@ class FaceArActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 1001
 
-        private const val EFFECT_NAME = "Beauty"
+        private const val EFFECT_NAME = "AsaiLines"
 
         private val REQUIRED_PERMISSIONS = arrayOf(
             Manifest.permission.CAMERA,

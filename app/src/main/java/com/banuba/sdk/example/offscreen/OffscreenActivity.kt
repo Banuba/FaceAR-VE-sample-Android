@@ -32,7 +32,7 @@ class OffscreenActivity : AppCompatActivity() {
 
         private const val REQUEST_CODE_PERMISSIONS = 1001
 
-        private const val SAMPLE_EFFECT_NAME = "Beauty"
+        private const val SAMPLE_EFFECT_NAME = "AsaiLines"
 
         private val CAMERA_CAPTURE_SIZE = Size(1280, 720)
 
