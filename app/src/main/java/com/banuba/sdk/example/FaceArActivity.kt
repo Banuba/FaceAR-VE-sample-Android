@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.banuba.sdk.example.databinding.AcitivityFaceArBinding
@@ -45,11 +46,31 @@ class FaceArActivity : AppCompatActivity() {
         binding.faceArOpenEditorButton.setOnClickListener {
             openVideoEditor()
         }
+        faceArOpenTrimmerButton.setOnClickListener {
+            openFilePicker.launch("video/mp4")
+        }
     }
 
     /*
      * Banuba Video Editor SDK specific code
      */
+
+    private val openFilePicker =  registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        runOnUiThread {
+            destroyFaceAr()
+
+            CoroutineScope(Dispatchers.Main.immediate).launch {
+                EditorLicenseManager.initialize(getString(R.string.banuba_token))
+            }
+
+            uri?.let { startTrimmer(uri) }
+        }
+    }
+
+    private fun startTrimmer(uri: Uri) {
+        val trimmerIntent = VideoCreationActivity.startFromTrimmer(this, arrayOf(uri))
+        startActivity(trimmerIntent)
+    }
 
     private fun openVideoEditor() {
         destroyFaceAr()
