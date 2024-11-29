@@ -30,6 +30,7 @@ class FaceArActivity : AppCompatActivity() {
 
     private var banubaSdkManager: BanubaSdkManager? = null
     private val effectHelper = BanubaEffectHelper()
+    private var isInitialized: Boolean = false
 
     private val videoEditorLauncher = registerForActivityResult<Application, String?>(VideoEditorLaunchContract()) {}
 
@@ -74,9 +75,12 @@ class FaceArActivity : AppCompatActivity() {
     }
 
     private fun initializeFaceAr() {
-        BanubaSdkManager.deinitialize()
+        if (isInitialized){
+            BanubaSdkManager.deinitialize()
+        }
         BanubaSdkManager.initialize(applicationContext, SampleApp.LICENSE_TOKEN)
         banubaSdkManager = BanubaSdkManager(applicationContext)
+        isInitialized = true
     }
 
     private fun destroyFaceAr() {
